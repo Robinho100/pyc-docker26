@@ -1,0 +1,19 @@
+---
+services:
+  minecraft-server:
+    image: itzg/minecraft-server
+    ports:
+      - "25565:25565"
+    restart: always
+    environment:
+      EULA: "TRUE"
+    tty: true
+    stdin_open: true
+    healthcheck:
+      test: >
+        curl -s localhost:25565 > /dev/null;
+        [ $$? -eq 1 ] && echo "Server alive" || echo "Server dead"
+      retries: 5
+      interval: 30s
+      timeout: 15s
+      start_period: 1m
