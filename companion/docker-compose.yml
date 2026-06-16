@@ -1,0 +1,52 @@
+---
+services:
+  cube-receptacle:
+    image: postgres
+    networks:
+      - cube
+    tty: true
+
+  edgeless-safety-cube-receptacle:
+    image: mysql
+    networks:
+      - round
+    tty: true
+
+  weighted-storage-cube:
+    image: nginx
+    networks:
+      - cube
+    depends_on:
+      - cube-receptacle
+    tty: true
+
+  edgeless-safety-cube:
+    image: debian
+    networks:
+      - round
+    depends_on:
+      - edgeless-safety-cube-receptacle
+    tty: true
+
+  companion-cube:
+    image: ubuntu
+    networks:
+      - cube
+    depends_on:
+      - cube-receptacle
+    tty: true
+
+  chell:
+    image: busybox
+    networks:
+      - cube
+      - round
+    depends_on:
+      - companion-cube
+      - edgeless-safety-cube
+      - weighted-storage-cube
+    command: sh -c "ping -c 2 weighted-storage-cube && ping -c 2 edgeless-safety-cube && ping -c 2 companion-cube"
+
+networks:
+  cube: {}
+  round: {}
