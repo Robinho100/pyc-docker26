@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  blue-eyes-white-dragon1:
+    build: .
+    ports:
+      - "3000:3000"
+    tty: true
+
+  blue-eyes-white-dragon2:
+    build: .
+    ports:
+      - "3001:3000"
+    tty: true
+
+  blue-eyes-white-dragon3:
+    build: .
+    ports:
+      - "3002:3000"
+    tty: true
+
+  polymerization:
+    image: curlimages/curl
+    depends_on:
+      - blue-eyes-white-dragon1
+      - blue-eyes-white-dragon2
+      - blue-eyes-white-dragon3
+    command: sh -c "curl http://blue-eyes-white-dragon1:3000 && curl http://blue-eyes-white-dragon2:3000 && curl http://blue-eyes-white-dragon3:3000"
