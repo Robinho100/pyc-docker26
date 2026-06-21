@@ -1,0 +1,1 @@
+BROTHER=luigi docker run -dt --name mushroom-kingdom --memory 500m --network none --read-only --cpus 2 -e BROTHER=luigi --hostname mario --workdir /srv node
